@@ -1,7 +1,7 @@
-# hasura-authjs
+# hasura-auth-js
 
-[![npm version](https://img.shields.io/npm/v/hasura-authjs.svg)](https://www.npmjs.com/package/hasura-authjs)
-[![DOWNLOADS](https://img.shields.io/npm/dt/hasura-authjs.svg?label=DOWNLOADS&style=flat)](https://www.npmjs.com/package/hasura-authjs)
+[![npm version](https://img.shields.io/npm/v/hasura-auth-js.svg)](https://www.npmjs.com/package/hasura-auth-js)
+[![DOWNLOADS](https://img.shields.io/npm/dt/hasura-auth-js.svg?label=DOWNLOADS&style=flat)](https://www.npmjs.com/package/hasura-auth-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Optimized Hasura Auth client library with latest packages and improved performance. A drop-in replacement for the deprecated `@nhost/hasura-auth-js` package.
@@ -36,17 +36,17 @@ For a complete list of features and methods, see [FEATURES.md](./FEATURES.md).
 ## Installation
 
 ```bash
-npm install hasura-authjs
+npm install hasura-auth-js
 # or
-pnpm add hasura-authjs
+pnpm add hasura-auth-js
 # or
-yarn add hasura-authjs
+yarn add hasura-auth-js
 ```
 
 ## Quick Start
 
 ```typescript
-import { HasuraAuthClient } from 'hasura-authjs'
+import { HasuraAuthClient } from 'hasura-auth-js'
 
 // Initialize the client
 const auth = new HasuraAuthClient({
@@ -113,7 +113,7 @@ This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`
 
 2. **Install the new package**:
    ```bash
-   npm install hasura-authjs
+   npm install hasura-auth-js
    ```
 
 3. **Update your imports**:
@@ -122,7 +122,7 @@ This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`
    import { HasuraAuthClient } from '@nhost/hasura-auth-js'
    
    // After
-   import { HasuraAuthClient } from 'hasura-authjs'
+   import { HasuraAuthClient } from 'hasura-auth-js'
    ```
 
 That's it! The API is identical, so no other code changes are needed.

@@ -1,5 +1,5 @@
 {
-  "name": "hasura-authjs",
+  "name": "hasura-auth-js",
   "version": "3.0.0",
   "description": "Hasura Auth client library for JavaScript/TypeScript. A drop-in replacement for the deprecated @nhost/hasura-auth-js package. Supports Email/Password, OAuth, WebAuthn, Passwordless, MFA, and more.",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "webauthn",
     "passwordless",
     "nhost",
-    "hasura-authjs",
+    "hasura-auth-js",
     "hasura-auth",
     "Rajnish Singh"
   ],
@@ -58,5 +58,5 @@
     "vite": "^7.2.1",
     "vitest": "^4.0.7"
   },
-  "repository":"rajnish93/hasura-authjs"
+  "repository":"rajnish93/hasura-auth-js"
 }

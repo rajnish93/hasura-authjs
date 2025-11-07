@@ -1,23 +1,23 @@
-# hasura-authjs - Features & Methods
+# hasura-auth-js - Features & Methods
 
 ## Overview
 
-`hasura-authjs` is an optimized Hasura Auth JavaScript client library with updated dependencies and improved structure. This package is based on the original [`@nhost/hasura-auth-js`](https://www.npmjs.com/package/@nhost/hasura-auth-js) package by [Nhost](https://nhost.io), which has been deprecated in favor of `@nhost/nhost-js@^4.0.0`.
+`hasura-auth-js` is an optimized Hasura Auth JavaScript client library with updated dependencies and improved structure. This package is based on the original [`@nhost/hasura-auth-js`](https://www.npmjs.com/package/@nhost/hasura-auth-js) package by [Nhost](https://nhost.io), which has been deprecated in favor of `@nhost/nhost-js@^4.0.0`.
 
 ## Installation
 
 ```bash
-npm install hasura-authjs
+npm install hasura-auth-js
 # or
-pnpm add hasura-authjs
+pnpm add hasura-auth-js
 # or
-yarn add hasura-authjs
+yarn add hasura-auth-js
 ```
 
 ## Quick Start
 
 ```typescript
-import { HasuraAuthClient } from 'hasura-authjs'
+import { HasuraAuthClient } from 'hasura-auth-js'
 
 const auth = new HasuraAuthClient({
   url: 'https://your-hasura-auth-endpoint.com'
@@ -139,7 +139,7 @@ This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`
 import { HasuraAuthClient } from '@nhost/hasura-auth-js'
 
 // After
-import { HasuraAuthClient } from 'hasura-authjs'
+import { HasuraAuthClient } from 'hasura-auth-js'
 ```
 
 The API is identical, so no code changes are needed beyond the import statement.
