@@ -44,10 +44,10 @@ export const rewriteRedirectTo = <T extends RedirectOption>(
     }
   }
   const baseClientUrl = new URL(clientUrl)
-  const clientParams = Object.fromEntries(new URLSearchParams(baseClientUrl.search))
+  const clientParams = Object.fromEntries(new URLSearchParams(baseClientUrl.search) as any)
   const url = new URL(redirectTo.startsWith('/') ? baseClientUrl.origin + redirectTo : redirectTo)
   const additionalParams = new URLSearchParams(url.search)
-  let combinedParams = Object.fromEntries(additionalParams)
+  let combinedParams = Object.fromEntries(additionalParams as any)
 
   if (redirectTo.startsWith('/')) {
     combinedParams = { ...clientParams, ...combinedParams }
@@ -92,8 +92,8 @@ export function removeParameterFromWindow(name: string) {
     search.delete(name)
     hash.delete(name)
     let url = window.location.pathname
-    if (Array.from(search).length) url += `?${search.toString()}`
-    if (Array.from(hash).length) url += `#${hash.toString()}`
+    if (Array.from(search as any).length) url += `?${search.toString()}`
+    if (Array.from(hash as any).length) url += `#${hash.toString()}`
     window.history.pushState({}, '', url)
   }
 }

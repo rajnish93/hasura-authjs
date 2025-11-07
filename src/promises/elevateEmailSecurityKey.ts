@@ -1,4 +1,4 @@
-import { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/typescript-types'
+import { type PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/browser'
 import {
   AuthActionErrorState,
   AuthActionSuccessState,
@@ -51,7 +51,7 @@ export const elevateEmailSecurityKeyPromise = async (authClient: AuthClient, ema
 
   let credential
   try {
-    credential = await startAuthentication(data)
+    credential = await startAuthentication({ optionsJSON: data })
   } catch (e: any) {
     const error = createAuthErrorPayload(e)
     return {

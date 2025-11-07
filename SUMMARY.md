@@ -4,14 +4,20 @@
 
 An optimized clone of the Hasura Auth JavaScript client library has been created in the `auth-js` directory with the following improvements:
 
+### 📌 Version Information
+
+- **Current Version**: 3.0.0
+- **Based on**: `@nhost/hasura-auth-js` v2.12.0 (deprecated)
+- **Versioning**: Major version bump to 3.0.0 reflects significant updates including major dependency upgrades, API changes, and modern build tooling
+
 ### 📦 Package Updates
-- **@simplewebauthn/browser**: ^10.0.0 (latest)
-- **xstate**: ^5.0.0 (latest - note: may require code updates)
+- **@simplewebauthn/browser**: ^13.2.2 (latest, with integrated types)
+- **xstate**: ^4.38.3 (stable version, avoiding v5 breaking changes)
 - **jwt-decode**: ^4.0.0 (latest)
 - **js-cookie**: ^3.0.5 (latest)
 - **fetch-ponyfill**: ^7.1.0 (latest)
-- **vite**: ^6.0.0 (latest)
-- **typescript**: ^5.6.0 (latest)
+- **vite**: ^7.2.1 (latest)
+- **typescript**: ^5.9.3 (latest)
 
 ### 🏗️ Project Structure
 ```
@@ -47,23 +53,17 @@ All original features are preserved:
 - ✅ Bearer token support
 
 ### ⚡ Optimizations
-1. **Modern Build**: Vite 6 with ES2022 target
+1. **Modern Build**: Vite 7 with ES2022 target
 2. **Better Tree-shaking**: Improved bundle size
 3. **Type Safety**: Enhanced TypeScript configuration
-4. **Latest Packages**: All dependencies updated to latest versions
+4. **Latest Packages**: All dependencies updated to latest stable versions
+5. **WebAuthn**: Updated to v13.2.2 with integrated types (no separate types package)
 
 ### ⚠️ Important Notes
 
-#### XState v5 Compatibility
-XState v5 has breaking changes. The code may need updates:
-- Check import statements
-- Verify machine definitions
-- Test interpreter usage
-
-**If you encounter issues**, you can downgrade to XState v4:
-```json
-"xstate": "^4.38.3"
-```
+#### Package Version Choices
+- **XState v4.38.3**: Using stable v4 instead of v5 to avoid breaking changes
+- **@simplewebauthn/browser v13.2.2**: Latest version with types integrated directly (deprecated separate types package removed)
 
 #### Next Steps
 1. Install dependencies: `cd auth-js && pnpm install`

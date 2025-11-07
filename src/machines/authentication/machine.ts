@@ -1,12 +1,14 @@
-import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
-import type {
-  AuthenticationCredentialJSON,
-  PublicKeyCredentialCreationOptionsJSON,
-  PublicKeyCredentialRequestOptionsJSON,
-  RegistrationCredentialJSON
-} from '@simplewebauthn/typescript-types'
+import {
+  startAuthentication,
+  startRegistration,
+  type AuthenticationResponseJSON,
+  type PublicKeyCredentialCreationOptionsJSON,
+  type PublicKeyCredentialRequestOptionsJSON,
+  type RegistrationResponseJSON
+} from '@simplewebauthn/browser'
 import { assign, createMachine, InterpreterFrom, send } from 'xstate'
 import {
+  NHOST_ACCESS_TOKEN_KEY,
   NHOST_JWT_EXPIRES_AT_KEY,
   NHOST_REFRESH_TOKEN_ID_KEY,
   NHOST_REFRESH_TOKEN_KEY,
@@ -44,6 +46,7 @@ import {
   VerifyEmailOTPResponse
 } from '../../types'
 import {
+  deleteFetch,
   getParameterByName,
   isValidEmail,
   isValidPassword,
@@ -103,6 +106,17 @@ export const createAuthMachine = ({
     headers?: Record<string, string>
   ): Promise<T> => {
     const result = await postFetch<T>(`${backendUrl}${url}`, data, token, headers)
+
+    return result.data
+  }
+
+  const deleteRequest = async <T = any, D = any>(
+    url: string,
+    data?: D,
+    token?: string | null,
+    headers?: Record<string, string>
+  ): Promise<T> => {
+    const result = await deleteFetch<T>(`${backendUrl}${url}`, data, token, headers)
 
     return result.data
   }
@@ -625,6 +639,7 @@ export const createAuthMachine = ({
         }),
         clearContext: assign(() => {
           storageSetter(NHOST_JWT_EXPIRES_AT_KEY, null)
+          storageSetter(NHOST_ACCESS_TOKEN_KEY, null)
           storageSetter(NHOST_REFRESH_TOKEN_KEY, null)
           storageSetter(NHOST_REFRESH_TOKEN_ID_KEY, null)
           return {
@@ -647,6 +662,10 @@ export const createAuthMachine = ({
               const { accessTokenExpiresIn, accessToken } = data.session
               const nextRefresh = new Date(Date.now() + accessTokenExpiresIn * 1_000)
               storageSetter(NHOST_JWT_EXPIRES_AT_KEY, nextRefresh.toISOString())
+              // Store access token in storage so it can be retrieved during token refresh
+              if (accessToken) {
+                storageSetter(NHOST_ACCESS_TOKEN_KEY, accessToken)
+              }
               return {
                 value: accessToken,
                 expiresAt: nextRefresh,
@@ -654,6 +673,7 @@ export const createAuthMachine = ({
               }
             }
             storageSetter(NHOST_JWT_EXPIRES_AT_KEY, null)
+            storageSetter(NHOST_ACCESS_TOKEN_KEY, null)
             return {
               value: null,
               expiresAt: null,
@@ -683,6 +703,10 @@ export const createAuthMachine = ({
               const { accessTokenExpiresIn, accessToken } = data.session
               const nextRefresh = new Date(Date.now() + accessTokenExpiresIn * 1_000)
               storageSetter(NHOST_JWT_EXPIRES_AT_KEY, nextRefresh.toISOString())
+              // Store access token in storage so it can be retrieved during token refresh
+              if (accessToken) {
+                storageSetter(NHOST_ACCESS_TOKEN_KEY, accessToken)
+              }
               return {
                 value: accessToken,
                 expiresAt: nextRefresh,
@@ -690,6 +714,7 @@ export const createAuthMachine = ({
               }
             }
             storageSetter(NHOST_JWT_EXPIRES_AT_KEY, null)
+            storageSetter(NHOST_ACCESS_TOKEN_KEY, null)
             return {
               value: null,
               expiresAt: null,
@@ -759,6 +784,7 @@ export const createAuthMachine = ({
         destroyAccessToken: assign({
           accessToken: (_) => {
             storageSetter(NHOST_JWT_EXPIRES_AT_KEY, null)
+            storageSetter(NHOST_ACCESS_TOKEN_KEY, null)
             return {
               value: null,
               expiresAt: null,
@@ -998,9 +1024,9 @@ export const createAuthMachine = ({
             '/signin/webauthn',
             { email }
           )
-          let credential: AuthenticationCredentialJSON
+          let credential: AuthenticationResponseJSON
           try {
-            credential = await startAuthentication(options)
+            credential = await startAuthentication({ optionsJSON: options })
           } catch (e) {
             throw new CodifiedError(e as Error)
           }
@@ -1009,12 +1035,18 @@ export const createAuthMachine = ({
         refreshToken: async (ctx, event) => {
           const refreshToken = event.type === 'TRY_TOKEN' ? event.token : ctx.refreshToken.value
           // console.debug('[AUTH] Refreshing token with:', refreshToken ? refreshToken.substring(0, 6) + '...' : 'null')
+          // Always pass Bearer token in header if available (for automatic refresh, page refresh, or manual refresh)
+          // Try to get access token from context first, then from storage if context doesn't have it
+          let accessToken = ctx.accessToken?.value || null
+          if (!accessToken) {
+            accessToken = await storageGetter(NHOST_ACCESS_TOKEN_KEY)
+          }
           const session: NhostSession = await postRequest<RefreshSessionResponse>(
             '/token',
             {
               refreshToken
             },
-            ctx.accessToken.value // Always pass Bearer token in header if available
+            accessToken // Always pass Bearer token in header if available
           )
           // console.debug('[AUTH] Token refreshed successfully:', session.refreshToken ? session.refreshToken.substring(0, 6) + '...' : 'null')
           return { session, error: null }
@@ -1026,9 +1058,9 @@ export const createAuthMachine = ({
               {}
             )
 
-            let credential: AuthenticationCredentialJSON
+            let credential: AuthenticationResponseJSON
             try {
-              credential = await startAuthentication(options)
+              credential = await startAuthentication({ optionsJSON: options })
             } catch (e) {
               throw new CodifiedError(e as Error)
             }
@@ -1038,7 +1070,7 @@ export const createAuthMachine = ({
           }
         },
         signout: async (ctx, e) => {
-          const signOutResponse = await postRequest(
+          const signOutResponse = await deleteRequest(
             '/signout',
             {
               refreshToken: ctx.refreshToken.value,
@@ -1109,9 +1141,9 @@ export const createAuthMachine = ({
             null,
             requestOptions?.headers
           )
-          let credential: RegistrationCredentialJSON
+          let credential: RegistrationResponseJSON
           try {
-            credential = await startRegistration(webAuthnOptions)
+            credential = await startRegistration({ optionsJSON: webAuthnOptions })
           } catch (e) {
             throw new CodifiedError(e as Error)
           }
@@ -1149,12 +1181,18 @@ export const createAuthMachine = ({
             const urlToken = getParameterByName('refreshToken') || null
             if (urlToken) {
               try {
+                // Always pass Bearer token in header if available (for page refresh with URL token)
+                // Try to get access token from context first, then from storage if context doesn't have it
+                let accessToken = ctx.accessToken?.value || null
+                if (!accessToken) {
+                  accessToken = await storageGetter(NHOST_ACCESS_TOKEN_KEY)
+                }
                 const session = await postRequest<NhostSession>(
                   '/token',
                   {
                     refreshToken: urlToken
                   },
-                  ctx.accessToken.value // Pass Bearer token if available
+                  accessToken // Always pass Bearer token in header if available
                 )
                 return { session, error: null }
               } catch (exception) {
@@ -1181,12 +1219,18 @@ export const createAuthMachine = ({
           const storageToken = await storageGetter(NHOST_REFRESH_TOKEN_KEY)
           if (storageToken) {
             try {
+              // Always pass Bearer token in header if available (for page refresh with storage token)
+              // Try to get access token from context first, then from storage if context doesn't have it
+              let accessToken = ctx.accessToken?.value || null
+              if (!accessToken) {
+                accessToken = await storageGetter(NHOST_ACCESS_TOKEN_KEY)
+              }
               const session = await postRequest<NhostSession>(
                 '/token',
                 {
                   refreshToken: storageToken
                 },
-                ctx.accessToken.value // Pass Bearer token if available
+                accessToken // Always pass Bearer token in header if available
               )
               return { session, error: null }
             } catch (exception) {

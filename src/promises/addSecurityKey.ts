@@ -1,8 +1,8 @@
-import { startRegistration } from '@simplewebauthn/browser'
 import {
-  PublicKeyCredentialCreationOptionsJSON,
-  RegistrationCredentialJSON
-} from '@simplewebauthn/typescript-types'
+  startRegistration,
+  type PublicKeyCredentialCreationOptionsJSON,
+  type RegistrationResponseJSON
+} from '@simplewebauthn/browser'
 import { postFetch } from '..'
 import { CodifiedError } from '../errors'
 import { AuthClient } from '../internal-client'
@@ -25,9 +25,9 @@ export const addSecurityKeyPromise = async (
       {},
       interpreter?.getSnapshot().context.accessToken.value
     )
-    let credential: RegistrationCredentialJSON
+    let credential: RegistrationResponseJSON
     try {
-      credential = await startRegistration(options)
+      credential = await startRegistration({ optionsJSON: options })
     } catch (e) {
       throw new CodifiedError(e as Error)
     }

@@ -1,7 +1,28 @@
-# Hasura Auth JS - Features & Methods
+# hasura-authjs - Features & Methods
 
 ## Overview
-This is an optimized clone of the Hasura Auth JavaScript client library with updated dependencies and improved structure.
+
+`hasura-authjs` is an optimized Hasura Auth JavaScript client library with updated dependencies and improved structure. This package is based on the original [`@nhost/hasura-auth-js`](https://www.npmjs.com/package/@nhost/hasura-auth-js) package by [Nhost](https://nhost.io), which has been deprecated in favor of `@nhost/nhost-js@^4.0.0`.
+
+## Installation
+
+```bash
+npm install hasura-authjs
+# or
+pnpm add hasura-authjs
+# or
+yarn add hasura-authjs
+```
+
+## Quick Start
+
+```typescript
+import { HasuraAuthClient } from 'hasura-authjs'
+
+const auth = new HasuraAuthClient({
+  url: 'https://your-hasura-auth-endpoint.com'
+})
+```
 
 ## Core Features
 
@@ -86,18 +107,51 @@ This is an optimized clone of the Hasura Auth JavaScript client library with upd
 - Windows Live, WorkOS
 - And more...
 
-## Package Versions (Latest)
-- `@simplewebauthn/browser`: ^10.0.0
-- `xstate`: ^5.0.0
+## Package Versions
+
+- `@simplewebauthn/browser`: ^13.2.2 (types integrated, no separate types package needed)
+- `xstate`: ^4.38.3
 - `jwt-decode`: ^4.0.0
 - `js-cookie`: ^3.0.5
 - `fetch-ponyfill`: ^7.1.0
+- `vite`: ^7.2.1 (build tool)
+- `typescript`: ^5.9.3
 
-## Improvements in This Clone
-1. ✅ Updated to latest package versions
+## Improvements in This Package
+
+1. ✅ Updated to latest stable package versions
 2. ✅ Modern TypeScript configuration (ES2022)
-3. ✅ Optimized build with Vite 6
-4. ✅ Better tree-shaking support
-5. ✅ Improved type safety
-6. ✅ Cleaner project structure
+3. ✅ Optimized build with Vite 7
+4. ✅ Dual output: ESM and CommonJS formats
+5. ✅ Better tree-shaking support
+6. ✅ Improved type safety with full TypeScript declarations
+7. ✅ Cleaner project structure
+8. ✅ Source maps for better debugging
+9. ✅ Stable XState v4 (avoiding v5 breaking changes)
+10. ✅ Latest WebAuthn library (v13.2.2) with integrated types
+
+## Migration from @nhost/hasura-auth-js
+
+This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`:
+
+```typescript
+// Before
+import { HasuraAuthClient } from '@nhost/hasura-auth-js'
+
+// After
+import { HasuraAuthClient } from 'hasura-authjs'
+```
+
+The API is identical, so no code changes are needed beyond the import statement.
+
+## Credits
+
+This package is based on the original work by [Nhost](https://nhost.io):
+- Original package: [`@nhost/hasura-auth-js`](https://www.npmjs.com/package/@nhost/hasura-auth-js)
+- Original repository: [nhost/nhost](https://github.com/nhost/nhost)
+- Original documentation: [Nhost Documentation](https://docs.nhost.io)
+
+## License
+
+MIT
 

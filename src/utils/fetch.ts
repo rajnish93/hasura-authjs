@@ -16,7 +16,7 @@ if (typeof EdgeRuntime !== 'string') {
 
 const fetchWrapper = async <T>(
   url: string,
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'DELETE',
   {
     token,
     body,
@@ -27,7 +27,7 @@ const fetchWrapper = async <T>(
     'Content-Type': 'application/json',
     Accept: '*/*'
   }
-  if (token) {
+  if (token && typeof token === 'string' && token.trim().length > 0) {
     headers['Authorization'] = `Bearer ${token}`
   }
 
@@ -72,3 +72,10 @@ export const postFetch = async <T>(
 
 export const getFetch = <T>(url: string, token?: string | null): Promise<FetchResponse<T>> =>
   fetchWrapper<T>(url, 'GET', { token })
+
+export const deleteFetch = async <T>(
+  url: string,
+  body: any,
+  token?: string | null,
+  extraHeaders?: HeadersInit
+): Promise<FetchResponse<T>> => fetchWrapper<T>(url, 'DELETE', { token, body, extraHeaders })
