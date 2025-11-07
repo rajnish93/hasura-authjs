@@ -38,12 +38,12 @@
     }
   },
   "scripts": {
-    "build": "pnpm run build:lib && pnpm run build:types",
+    "build": "npm run build:lib && npm run build:types",
     "build:lib": "vite build",
     "build:types": "tsc --project tsconfig.json --emitDeclarationOnly",
     "typecheck": "tsc --noEmit",
     "dev": "vite build --watch",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@simplewebauthn/browser": "^13.2.2",
