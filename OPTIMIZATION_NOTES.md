@@ -2,7 +2,7 @@
 
 ## Package Information
 
-- **Package Name**: `hasura-authjs`
+- **Package Name**: `hasura-auth-js`
 - **Version**: 3.0.0
 - **Based on**: [`@nhost/hasura-auth-js`](https://www.npmjs.com/package/@nhost/hasura-auth-js) v2.12.0 by [Nhost](https://nhost.io)
 - **Original Repository**: [nhost/nhost](https://github.com/nhost/nhost)
@@ -78,11 +78,11 @@ The jump from 2.12.0 to 3.0.0 reflects:
 
 ### Install
 ```bash
-npm install hasura-authjs
+npm install hasura-auth-js
 # or
-pnpm add hasura-authjs
+pnpm add hasura-auth-js
 # or
-yarn add hasura-authjs
+yarn add hasura-auth-js
 ```
 
 ### Development
@@ -136,7 +136,7 @@ This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`
 1. **Install**:
    ```bash
    npm uninstall @nhost/hasura-auth-js
-   npm install hasura-authjs
+   npm install hasura-auth-js
    ```
 
 2. **Update Imports**:
@@ -145,7 +145,7 @@ This package is a drop-in replacement for the deprecated `@nhost/hasura-auth-js`
    import { HasuraAuthClient } from '@nhost/hasura-auth-js'
    
    // After
-   import { HasuraAuthClient } from 'hasura-authjs'
+   import { HasuraAuthClient } from 'hasura-auth-js'
    ```
 
 3. **API Compatibility**: The API is identical, so no code changes are needed beyond the import statement.
