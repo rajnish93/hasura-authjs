@@ -1,6 +1,7 @@
 # hasura-authjs
 
 [![npm version](https://img.shields.io/npm/v/hasura-authjs.svg)](https://www.npmjs.com/package/hasura-authjs)
+[![DOWNLOADS](https://img.shields.io/npm/dt/hasura-authjs.svg?label=DOWNLOADS&style=flat)](https://www.npmjs.com/package/hasura-authjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Optimized Hasura Auth client library with latest packages and improved performance. A drop-in replacement for the deprecated `@nhost/hasura-auth-js` package.
