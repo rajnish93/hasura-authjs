@@ -3,14 +3,7 @@ name: '🚀 publish'
 on:
     push:
         branches:
-            - dev
             - main
-    workflow_dispatch:    # 👈 allows manual trigger from the GitHub Actions UI
-
-permissions:
-    id-token: write
-    contents: read
-    packages: write
 
 jobs:
     release:
@@ -26,12 +19,7 @@ jobs:
                   registry-url: 'https://registry.npmjs.org'
             - name: 📦 Install dependencies
               run: npm ci
-            - name: 🔍 Dry-run publish (dev branch)
-              if: github.ref == 'refs/heads/dev'
-              run: npm publish --access public --dry-run
-
             - name: 🚀 Publish to npm
-              if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
               run: npm publish --access public
-              # env:
-              #   NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
